@@ -33,6 +33,24 @@ Or copy the directories in directly. Most skills have a `Dependencies` section i
 
 These skills are published as snapshots from a private repo I use for my own work. They work for me — they may or may not work for you without tweaks. Issues and PRs welcome but responses may be slow.
 
+## Credits
+
+Each skill wraps one or more open-source projects. The skills' own code is MIT-licensed, but the runtime dependencies each carry their own license — install and use accordingly:
+
+- **[PyMuPDF](https://github.com/pymupdf/PyMuPDF)** (used by `watermark`) — **AGPL-3.0** or commercial. AGPL is copyleft and can affect how you redistribute software that links against it. Artifex sells a commercial license if AGPL doesn't fit your use case.
+- **[MuPDF](https://mupdf.com)** (underlies PyMuPDF) — **AGPL-3.0-or-later** or commercial
+- **[Pillow](https://github.com/python-pillow/Pillow)** (used by `watermark-video`) — MIT-CMU (HPND)
+- **[FFmpeg](https://ffmpeg.org)** (used by `watermark-video`) — LGPL-2.1-or-later by default; GPL-2.0-or-later for builds with `--enable-gpl` (e.g. libx264 support). Homebrew's default build is GPL.
+- **[Python-Markdown](https://github.com/Python-Markdown/markdown)** (used by `md-to-pdf`) — BSD-3-Clause
+- **[WeasyPrint](https://github.com/Kozea/WeasyPrint)** (used by `md-to-pdf`) — BSD-3-Clause
+- **[Pygments](https://pygments.org)** (used by `md-to-pdf`) — BSD-2-Clause
+- **[Pango](https://pango.gnome.org)** (used by `md-to-pdf` via WeasyPrint) — LGPL-2.0-or-later
+- **[Ghostty](https://github.com/ghostty-org/ghostty)** (configured by `ghostty`) — MIT
+- **[stickerdaniel/linkedin-mcp-server](https://github.com/stickerdaniel/linkedin-mcp-server)** (drives `linkedin`) — Apache-2.0
+- **[Patchright](https://github.com/Kaliiiiiiiiii-Vinyzu/patchright)** (Playwright fork, used by linkedin-mcp-server) — Apache-2.0
+
+Thanks to the maintainers of all of the above.
+
 ## License
 
-MIT. See [LICENSE](LICENSE).
+The skills in this repo are MIT-licensed — see [LICENSE](LICENSE). That applies to the code I wrote. It does **not** override the licenses of any dependencies listed under Credits — in particular, if you use the `watermark` skill, you're also using PyMuPDF, which is AGPL-3.0.

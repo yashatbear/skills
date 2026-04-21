@@ -86,7 +86,7 @@ Slug is the recipient name lowercased with non-alphanumeric characters replaced 
 - **Default 65pt is sized for slides, not docs.** The default assumes a 1920×1080 deck page. On US Letter (8.5×11) pages, 65pt clips at both edges of the rotated text — use `--fontsize 40` for Letter/A4 documents. If you see the watermark cut off in preview, drop the fontsize.
 - **Match color to background.** The default cream reads well on dark slide backgrounds but is invisible on cream/tan/white body pages — use `--color brown` (and likely a smaller `--fontsize`) for light-background documents. Don't default to cream just because it's the skill default.
 - **Textbox won't fit.** If the error fires, drop `--fontsize` or shorten the recipient name / date string.
-- **Dependency.** Requires `pymupdf` (`pip install pymupdf`). System Python on macOS typically has it; if not, `/opt/homebrew/bin/python3 -m pip install pymupdf`.
+- **Dependency.** Requires `pymupdf` (`pip install pymupdf`). System Python on macOS typically has it; if not, `/opt/homebrew/bin/python3 -m pip install pymupdf`. PyMuPDF and the underlying MuPDF are licensed **AGPL-3.0** (or commercial) — consider the implications before redistributing a product that uses this skill.
 - **Preserves source.** The script never modifies the source PDF — it opens, overlays, and saves to a new file.
 - **Not a security boundary.** This is a visible-trail watermark, not a DRM system. A determined adversary can strip it. Use your cloud-storage share-link controls (download disabled, expiring links) for actual access control.
 
