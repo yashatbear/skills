@@ -5,6 +5,8 @@ description: Search LinkedIn profiles, companies, and jobs via a local MCP serve
 
 # LinkedIn MCP (Local Fork)
 
+> ⚠ **Use at your own risk.** This skill automates a real logged-in LinkedIn session via a browser driver. That's against LinkedIn's Terms of Service and can get your account rate-limited, flagged, or suspended. Don't run it against an account you can't afford to lose, don't run it at high volume, and don't use it for anything LinkedIn's ToS prohibits (bulk scraping, commercial data products, etc.). Published as-is, no warranty — see [LICENSE](../LICENSE).
+
 ## When to Use
 
 When you need to search for people, look up profiles/companies, or find jobs on LinkedIn. Especially useful for:
