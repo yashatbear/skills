@@ -24,6 +24,7 @@ Or copy the directories in directly. Most skills have a `Dependencies` section i
 - **cleanup** — Inventories background processes and asks before killing them.
 - **ghostty** — Configures and manages the Ghostty terminal emulator.
 - **learn** — Captures corrections and preferences into a persistent memory system so the same mistake doesn't recur across sessions.
+- **d** — "Document" — captures the conversation's decisions, findings, and referenced resources into your project's docs folder. Sibling of `learn`.
 - **linkedin** — Searches LinkedIn profiles/companies/jobs via a local MCP server with faceted filters.
 - **p** — "Proceed" — execute the recommended action from the previous response.
 - **s** — "Simplify" — re-explain the previous response in plain language.
