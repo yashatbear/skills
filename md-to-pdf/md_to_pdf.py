@@ -46,7 +46,7 @@ def md_to_pdf(md_path, pdf_path=None, title=None):
 <style>
     @page {{
         size: letter;
-        margin: 0.9in 1in;
+        margin: 0.45in 0.5in 0.5in 0.5in;
         @bottom-center {{
             content: counter(page);
             font-family: -apple-system, 'SF Pro Text', 'Helvetica Neue', Helvetica, sans-serif;
@@ -57,36 +57,36 @@ def md_to_pdf(md_path, pdf_path=None, title=None):
     body {{
         font-family: -apple-system, 'SF Pro Text', 'Helvetica Neue', Helvetica, sans-serif;
         font-size: 10.5pt;
-        line-height: 1.47059;
+        line-height: 1.35;
         color: #1d1d1f;
         max-width: 100%;
         -webkit-font-smoothing: antialiased;
     }}
     h1 {{
         font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', Helvetica, sans-serif;
-        font-size: 28pt;
+        font-size: 22pt;
         font-weight: 700;
         letter-spacing: -0.003em;
         margin-top: 0;
-        margin-bottom: 0.4em;
+        margin-bottom: 0.3em;
         color: #1d1d1f;
     }}
     h2 {{
         font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', Helvetica, sans-serif;
-        font-size: 17pt;
+        font-size: 14pt;
         font-weight: 600;
         letter-spacing: -0.003em;
-        margin-top: 1.8em;
-        margin-bottom: 0.4em;
+        margin-top: 1.0em;
+        margin-bottom: 0.3em;
         color: #1d1d1f;
     }}
     h3 {{
         font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', Helvetica, sans-serif;
-        font-size: 13pt;
+        font-size: 12pt;
         font-weight: 600;
         letter-spacing: -0.003em;
-        margin-top: 1.4em;
-        margin-bottom: 0.35em;
+        margin-top: 0.85em;
+        margin-bottom: 0.25em;
         color: #1d1d1f;
     }}
     h4 {{
@@ -98,7 +98,7 @@ def md_to_pdf(md_path, pdf_path=None, title=None):
         color: #1d1d1f;
     }}
     p {{
-        margin-bottom: 0.7em;
+        margin-bottom: 0.45em;
         margin-top: 0;
     }}
     strong {{
@@ -167,7 +167,7 @@ def md_to_pdf(md_path, pdf_path=None, title=None):
         padding-left: 1.4em;
     }}
     li {{
-        margin-bottom: 0.25em;
+        margin-bottom: 0.15em;
     }}
     li > ul, li > ol {{
         margin-top: 0.25em;
