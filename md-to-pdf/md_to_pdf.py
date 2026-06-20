@@ -1,10 +1,70 @@
 #!/opt/homebrew/bin/python3.14
-"""Convert Markdown files to beautifully formatted PDFs using WeasyPrint."""
+"""Convert Markdown files to beautifully formatted PDFs using WeasyPrint.
+
+Mermaid fenced blocks (```mermaid ... ```) are rendered to SVG via mmdc and
+embedded as images. Requires `mmdc` on PATH (npm i -g @mermaid-js/mermaid-cli).
+If mmdc is missing, mermaid blocks fall through as code.
+"""
 
 import markdown
 from weasyprint import HTML
+import atexit
 import sys
 import os
+import re
+import shutil
+import subprocess
+import tempfile
+from pathlib import Path
+
+
+MERMAID_BLOCK = re.compile(r"^```mermaid\n(.*?)\n```", re.MULTILINE | re.DOTALL)
+
+
+def _render_mermaid_blocks(md_content: str):
+    """Replace ```mermaid blocks with <img> tags pointing at rendered SVGs.
+
+    Returns (rendered_content, svg_dir). svg_dir is the temp directory holding the
+    rendered SVGs (which WeasyPrint reads by absolute path during write_pdf) or
+    None if nothing was rendered. The caller is responsible for removing svg_dir
+    once the PDF has been written.
+    """
+    if not MERMAID_BLOCK.search(md_content):
+        return md_content, None
+    if not shutil.which("mmdc"):
+        print(
+            "Warning: mmdc not found on PATH; mermaid blocks will render as code. "
+            "Install: npm i -g @mermaid-js/mermaid-cli",
+            file=sys.stderr,
+        )
+        return md_content, None
+
+    svg_dir = Path(tempfile.mkdtemp(prefix="md_to_pdf_mermaid_"))
+    counter = {"i": 0}
+
+    def replace(match: "re.Match[str]") -> str:
+        idx = counter["i"]
+        counter["i"] += 1
+        diagram_src = match.group(1)
+        mmd_file = svg_dir / f"diagram-{idx}.mmd"
+        svg_file = svg_dir / f"diagram-{idx}.svg"
+        mmd_file.write_text(diagram_src)
+        result = subprocess.run(
+            ["mmdc", "-i", str(mmd_file), "-o", str(svg_file), "-b", "transparent"],
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0 or not svg_file.exists():
+            print(
+                f"mmdc failed for diagram {idx}: {result.stderr.strip()}",
+                file=sys.stderr,
+            )
+            return match.group(0)
+        # Markdown image syntax with absolute path; surround with blank lines so
+        # the markdown parser treats it as a block-level image, not inline text.
+        return f"\n![mermaid diagram {idx}]({svg_file})\n"
+
+    return MERMAID_BLOCK.sub(replace, md_content), svg_dir
 
 
 def md_to_pdf(md_path, pdf_path=None, title=None):
@@ -20,6 +80,12 @@ def md_to_pdf(md_path, pdf_path=None, title=None):
 
     with open(md_path, "r") as f:
         md_content = f.read()
+
+    md_content, mermaid_dir = _render_mermaid_blocks(md_content)
+    # WeasyPrint reads the rendered SVGs by absolute path during write_pdf below,
+    # so the temp dir must outlive this call — clean it up at process exit.
+    if mermaid_dir is not None:
+        atexit.register(shutil.rmtree, mermaid_dir, ignore_errors=True)
 
     # Convert MD to HTML with useful extensions
     html_body = markdown.markdown(
