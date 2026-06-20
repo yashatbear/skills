@@ -26,7 +26,8 @@ Both should be inferred from chat context when possible:
 Optional inputs:
 - **Date** — defaults to today (ISO format). Override with `--date`.
 - **Output directory** — defaults to `<src_dir>/watermarked copies/`. Override with `--out`.
-- **Color / opacity / fontsize** — sensible defaults (cream, 22% opacity, 65pt Helvetica).
+- **Color / opacity / fill** — sensible defaults (cream, 20% opacity, SF Pro Bold, wide-tracked ALL CAPS, dynamically sized to span the page). Override with `--color`, `--opacity`, `--fill`.
+- **`--no-caps`** — keep the recipient/text exactly as typed (disables the wide ALL-CAPS tracking) for cases where caps don't suit the document.
 
 ## Usage
 
@@ -45,7 +46,7 @@ python3 /path/to/skills/watermark/watermark.py \
   --date 2026-04-10 \
   --color grey \
   --opacity 0.30 \
-  --fontsize 70
+  --fill 0.88
 ```
 
 The script prints the output path on success. Show it to the user.
@@ -64,12 +65,25 @@ Slug is the recipient name lowercased with non-alphanumeric characters replaced 
 
 ## Watermark design
 
-- **Text:** `<recipient>  ·  <date>  ·  confidential`
-- **Position:** dead-center of each page
-- **Rotation:** 45° diagonal (counterclockwise)
-- **Color:** cream (#EDDBC3) by default — readable on dark slide backgrounds, subtle on cream surfaces
-- **Opacity:** 22% — visible without fighting content
-- **Fontsize:** 65pt — sized so the rotated text stays inside a standard 1920×1080 deck page
+The default house style is SF Pro Bold, wide-tracked ALL CAPS, sized to span the page corner-to-corner.
+
+- **Text:** wide-tracked ALL CAPS — `R E C I P I E N T   ·   <date>   ·   C O N F I D E N T I A L`. Pass `--no-caps` to keep typed case with no tracking.
+- **Font:** SF Pro Display Bold (see **Font requirement** below). Falls back to Helvetica-Bold with an install hint if SF Pro isn't installed.
+- **Position:** dead-center of each page.
+- **Diagonal:** follows the page's **true corner-to-corner angle** (≈29° on 16:9 slides), running bottom-left → top-right, so it spans the whole page regardless of aspect ratio. Override with `--angle <deg>`.
+- **Size:** dynamic — the text is auto-sized to span `--fill` (default 0.90) of the page diagonal. No fixed fontsize; it adapts per page, so it never clips and always reaches the corners.
+- **Color:** cream (#EDDBC3) by default — readable on dark slide backgrounds, subtle on cream surfaces.
+- **Opacity:** 20% — visible without fighting content.
+
+### Font requirement
+
+The house style needs **SF Pro Display Bold**. Apple's license forbids redistributing the font, so it is **not** committed to this repo — install it on each machine that runs the skill (laptops, CI):
+
+1. Download **SF Pro** from https://developer.apple.com/fonts/ (free).
+2. Open the `.dmg` and run the installer `.pkg`, or copy the `.otf` files into `~/Library/Fonts/`.
+3. The script auto-detects `SF-Pro-Display-Bold.otf` in `~/Library/Fonts/` or `/Library/Fonts/`.
+
+If SF Pro is missing, the script still produces a watermark but falls back to **Helvetica-Bold** and prints the install hint to stderr. **When you see that hint, install SF Pro and re-run** so the output matches the house style — don't ship the Helvetica fallback for anything client-facing. (A local, untracked `watermark/fonts/SF-Pro-Display-Bold.otf` is also picked up if present.)
 
 ### Color presets
 
@@ -82,10 +96,9 @@ Slug is the recipient name lowercased with non-alphanumeric characters replaced 
 
 ## Gotchas
 
-- **Fontsize ceiling.** The watermark must fit within the page after 45° rotation. For 1920×1080 slides, max fontsize is ~65pt with the default text. Larger sizes cause `insert_textbox` to return a negative value and render nothing. The script raises an error with a hint if this happens.
-- **Default 65pt is sized for slides, not docs.** The default assumes a 1920×1080 deck page. On US Letter (8.5×11) pages, 65pt clips at both edges of the rotated text — use `--fontsize 40` for Letter/A4 documents. If you see the watermark cut off in preview, drop the fontsize.
-- **Match color to background.** The default cream reads well on dark slide backgrounds but is invisible on cream/tan/white body pages — use `--color brown` (and likely a smaller `--fontsize`) for light-background documents. Don't default to cream just because it's the skill default.
-- **Textbox won't fit.** If the error fires, drop `--fontsize` or shorten the recipient name / date string.
+- **Sizing is dynamic — no fontsize knob.** The text auto-sizes to span the page diagonal, so it fits any aspect ratio (16:9 slides, US Letter memos, A4) without clipping. To make it less dominant, lower `--fill` (e.g. `--fill 0.80`); to make it bolder, raise it toward `1.0`. The legacy `--fontsize` and `--rotation` flags are **deprecated and ignored** — the script accepts them (so old callers don't hard-error) but prints a warning. Use `--fill` instead of `--fontsize`, and `--angle <deg>` instead of `--rotation`.
+- **Light-background docs need `--color brown`.** The default cream is invisible on tan/cream/white body pages — it only reads on dark backgrounds. For light-background memos and documents, pass `--color brown`. Match the color to the document background; don't default to cream just because it's the skill default.
+- **Long labels just get smaller.** Because sizing is dynamic, a long recipient/label no longer overflows — it shrinks to fit. If that makes it too small, shorten the label rather than fighting the size.
 - **Dependency.** Requires `pymupdf` (`pip install pymupdf`). System Python on macOS typically has it; if not, `/opt/homebrew/bin/python3 -m pip install pymupdf`. PyMuPDF and the underlying MuPDF are licensed **AGPL-3.0** (or commercial) — consider the implications before redistributing a product that uses this skill.
 - **Preserves source.** The script never modifies the source PDF — it opens, overlays, and saves to a new file.
 - **Not a security boundary.** This is a visible-trail watermark, not a DRM system. A determined adversary can strip it. Use your cloud-storage share-link controls (download disabled, expiring links) for actual access control.

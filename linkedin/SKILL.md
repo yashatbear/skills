@@ -35,6 +35,27 @@ All tools are prefixed with `mcp__linkedin__` when called.
 |---|---|
 | `search_people` | Search for people with advanced filters (see below) |
 | `get_person_profile` | Get a person's profile by username |
+| `get_shared_connections` | Mutual connections between the viewer and a target |
+| `get_sidebar_profiles` | "People you may know" / recommended profiles on a page |
+
+> **`get_shared_connections` only works for 2nd-degree targets.** Mutuals are
+> people 1st-degree to *both* you and the target — that's exactly the 2nd-degree
+> case. A **1st-degree** target returns nothing useful (the view is just *their*
+> connections); a **3rd-degree** target has *no* mutual by definition. The tool
+> reads the target's degree badge and refuses (returns `note`, empty `sections`)
+> for anything but 2nd-degree, and echoes `target_name`/`target_degree` so you
+> can confirm it resolved the right person. Always check `target_name` matches
+> who you asked for before trusting the list — a 3rd-degree profile has no
+> Message button, and the URN resolver can otherwise grab a stray recommendation
+> card's identity and return a *stranger's* network.
+>
+> **If it refuses for a real 2nd-degree target (no Message button → `Could not
+> resolve profile URN`), the mutuals are still reachable** — the profile renders
+> a `"<A>, <B> and N other mutual connections"` link; navigate that href to a
+> `/search/results/people/?facetConnectionOf=…` page listing every mutual with
+> full name + slug. `scripts/mutual_connection_check.py` does exactly this
+> click-through. Pace it (a delay around each `page.goto`) and abort on
+> `/checkpoint`|`/authwall`. Don't conclude "no warm path" from the refusal.
 
 ### Companies
 
@@ -116,6 +137,8 @@ The main profile page is always included. Example: `sections="experience,educati
 - Automatic detection of LinkedIn rate limits, CAPTCHAs, and auth walls
 - Single retry with 5-second backoff on soft rate limits
 - Filters requiring ID resolution add extra page visits (1 per company, 1 for connection_of)
+- **Bulk scraping can get the account temporarily restricted.** Fanning out thousands of faceted searches back-to-back (e.g. a whole audience × dozens of companies) can trigger a multi-day account restriction and invalidate the logged-in profile (a fresh `--login` is then required to recover). For large jobs: pace **30–45s between subjects, ~10–15 subjects/day spread across days**, and smoke-test ONE scan after any re-login before resuming. Treat an all-zero result that coincides with a navigation / "execution context destroyed" error as a **throttle (retry), not a genuine zero**.
+- **`connection_of` counts are a floor, and the subject is excluded.** The faceted `connectionOf` + `network=["F","S"]` search only surfaces that person's connections that ALSO fall in *your* 1st/2nd-degree network, so it undercounts (you miss their connections outside your network even when their list is public). The script drops the subject from their own results.
 
 ## Reusable Scripts
 
@@ -148,6 +171,10 @@ These scripts bypass the MCP tool interface and use the fork's Python API direct
 - You need to batch-process many profiles efficiently
 
 **Important:** When you create new LinkedIn automation scripts during a session, save them to this `scripts/` directory for future agents to reuse.
+
+## Resolving usernames
+
+- **WebSearch for the LinkedIn slug, don't guess.** Given a name, use a web search like `"<full name>" linkedin.com/in` to find the actual `linkedin.com/in/<slug>` URL. Guessed slugs (lowercase first-last, etc.) often don't exist or hit the wrong person.
 
 ## Troubleshooting
 
