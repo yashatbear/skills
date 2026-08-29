@@ -1,0 +1,21 @@
+{
+  "name": "browse",
+  "version": "1.0.0",
+  "description": "Fast headless browser for QA testing and site dogfooding",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "browse": "./dist/browse"
+  },
+  "scripts": {
+    "build": "bun build --compile src/cli.ts --outfile dist/browse",
+    "start": "bun run src/server.ts"
+  },
+  "dependencies": {
+    "playwright": "^1.58.2",
+    "diff": "^7.0.0"
+  },
+  "engines": {
+    "bun": ">=1.0.0"
+  }
+}

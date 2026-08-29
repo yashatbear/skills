@@ -15,8 +15,15 @@ ln -s ~/skills/watermark ~/.claude/skills/watermark
 
 Or copy the directories in directly. Most skills have a `Dependencies` section in their `SKILL.md` — install those before using the skill.
 
+A couple of skills need a build or setup step, documented in their own `SKILL.md`:
+
+- **browse** ships source, not a binary — `npm install`, then `bun build --compile src/cli.ts --outfile dist/browse`, then `npx playwright install chromium`.
+- **artifact**'s icon helper (`sf-icons.sh`) renders SF Symbols locally on first use (macOS + the SF Symbols app + Xcode CLT `swift`); the render cache ships empty and is gitignored, because Apple's SF Symbols license restricts redistributing the glyph artwork.
+
 ## What's here
 
+- **artifact** — Builds a single self-contained `.html` page (inline CSS/JS, light + dark, no CDNs) you open straight from disk. For UI mockups, dashboards, message previews, and visual explainers. Ships a template, a structure checker, an asset-inliner, and an SF-Symbol icon helper (macOS).
+- **browse** — A persistent headless-Chromium CLI for QA and dogfooding: navigate, click, fill, screenshot, accessibility snapshots, before/after diffs, console/network inspection. Built on Bun + Playwright; build from source (see its SKILL.md).
 - **watermark** — Adds a per-recipient diagonal watermark to a PDF ("Name · Date · confidential") for tracked document sharing. Built on PyMuPDF.
 - **watermark-video** — Same idea for videos (.mov, .mp4). Built on FFmpeg + Pillow.
 - **md-to-pdf** — Converts Markdown to a cleanly styled PDF via WeasyPrint.
@@ -49,6 +56,12 @@ Each skill wraps one or more open-source projects. The skills' own code is MIT-l
 - **[Ghostty](https://github.com/ghostty-org/ghostty)** (configured by `ghostty`) — MIT
 - **[stickerdaniel/linkedin-mcp-server](https://github.com/stickerdaniel/linkedin-mcp-server)** (drives `linkedin`) — Apache-2.0
 - **[Patchright](https://github.com/Kaliiiiiiiiii-Vinyzu/patchright)** (Playwright fork, used by linkedin-mcp-server) — Apache-2.0
+- **[Playwright](https://github.com/microsoft/playwright)** (drives `browse`) — Apache-2.0
+- **[Chromium](https://www.chromium.org)** (downloaded by `browse` via `playwright install chromium`, not bundled) — BSD-3-Clause + others
+- **[Bun](https://bun.sh)** (builds/runs `browse`) — MIT
+- **[jsdiff](https://github.com/kpdecker/jsdiff)** (`diff`, used by `browse`) — BSD-3-Clause
+- **[SF Symbols](https://developer.apple.com/sf-symbols/)** (rendered on demand by `artifact`'s `sf-icons.sh`) — **Apple license**. The glyphs are Apple's; their license restricts redistribution and reproduction, so this repo ships **no** rendered SF Symbol artwork — `sf-icons.sh` renders them locally on your Mac and the cache is gitignored. Using the icon helper means agreeing to Apple's SF Symbols license.
+- **gstack** — the `browse` skill is a public extraction of **gstack**, the headless-browser CLI it grew out of. Credit and thanks to gstack for the foundation.
 
 Thanks to the maintainers of all of the above.
 

@@ -2,3 +2,11 @@
 __pycache__/
 *.pyc
 node_modules/
+
+# artifact skill: SF Symbol render cache is generated locally (Apple glyph artwork,
+# not redistributable) — never commit rendered PNGs.
+artifact/icons-cache/*/
+
+# browse skill: built CLI + Bun build scratch (users build from source)
+browse/dist/
+*.bun-build

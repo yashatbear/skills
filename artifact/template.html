@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TITLE — short description</title>
+
+<!-- Guidance for agents editing this page. Never rendered. See the `artifact` skill. -->
+<script type="text/markdown" id="agents-md">
+# AGENTS.md — for agents editing this artifact
+
+## What this page is
+TODO: one line — subject, audience, and what it is for.
+
+## Structure
+Declared here and enforced by `bash agents-block.sh --check <page>` (exit 4 on violation).
+- type: TODO — decision | reference | mockup | preview | explainer
+- bottom: TODO — next-steps | open-questions | none — <why there are none>
+
+`mockup`, `preview` and `explainer` have nothing to summarise, so they skip the shape
+checks. `decision` and `reference` must carry the three parts below. There is
+deliberately no `waiver:` line here — a waiver is a recorded, reviewable decision, so it
+is opt-in: you add one on purpose, with a real reason. See the `artifact` skill.
+
+## Structural rules
+- **Executive summary at the top: max 5 one-line bullets, and 5 is a CEILING, not a
+  target.** Three strong bullets beat five padded ones. Bullets state only DERIVED
+  conclusions — a comparison, ratio, trend, or verdict. A bullet must NOT restate a figure
+  that already appears verbatim in a chart or table below. "Option A is 132× cheaper than
+  Option B" is a summary; "$5.6118" is a duplicate. (Summary tiles that merely restated
+  chart data have been deleted from pages by hand for exactly this reason; derived-only is
+  what keeps the one sanctioned duplication honest.) Every figure it states must CLOSE
+  against the asset it derives from, with the arithmetic recorded under `## Derivations`
+  below — gated, because a page once shipped claiming "19 of 20 … from 7 distinct senders"
+  over a table summing to 18 of 19 across 8, and every other check passed. Lives in an
+  element with id `exec-summary`, as `<li>` bullets; ≤100 chars each.
+- **The middle is MECE facts, as visual as possible.** Mutually exclusive, collectively
+  exhaustive. The rule is *no fact appears twice FOR THE SAME PURPOSE*, not *no fact
+  appears twice*: a chart and a table may legitimately carry the same numbers — the chart
+  gives shape, ordering and magnitude, the table gives precision, tokens/metadata and
+  outcome. That split is deliberate and correct. The failure is a THIRD home with no
+  distinct job.
+- **Visual, but not gratuitously.** Pick the simplest form that shows the comparison. A
+  chart earns its place when shape matters — ordering, magnitude, trend. For three data
+  points a table is more honest than a bar chart. The test is whether the form carries
+  meaning the text can't.
+- **The bottom is conditional, and omitted when empty.** Decision/recommendation pages end
+  in **Next steps** (id `next-steps`); reference/measurement pages end in **Open questions
+  / what would change this** (id `open-questions`). Same caps: max 5 bullets, one line
+  each, ceiling not target. If there are no next steps, delete the section — do not pad.
+  Record that as `bottom: none — <reason>` above; a forced section produces filler.
+
+## Standing rules
+- **Represent new data in the assets that already exist.** When new facts arrive, extend
+  every view already on this page that can carry them — add the row, series, column, or
+  tile to the existing chart/table — before you consider adding a new one. A new asset is
+  only correct when the data genuinely has no home in what is here (different unit, scope,
+  or population), and when you add one you must record why under Deliberate exclusions.
+  Adding a fresh card beside the existing ones for data those could have carried is drift:
+  the page ends up stating the same fact in two shapes and no reader can tell which is
+  authoritative.
+- **Keep the views in sync, and re-walk the figures.** A figure shown in one view belongs
+  in every other view whose scope covers it. After any edit, walk each asset and confirm
+  the new data is present or deliberately excluded — then re-check every figure in the
+  summary against the asset it derives from and update `## Derivations`. A figure that
+  closed before an edit is not a figure that closes after one.
+- **Deliberate exclusions are decisions, not gaps.** Anything listed below was left out on
+  purpose. Do not "fix" it without saying so, and if you do change it, update this block.
+- **Edit in place; preserve tailoring.** Never regenerate this page from the template — it
+  would wipe the adjustments asked for in chat. Same file path, always.
+
+## Derivations
+One line per summary bullet that states a figure, naming the asset it computes from and
+showing the arithmetic — `"19 of 20" = 18 inbox-table rows + 1 unresolved, of 20 fetched`.
+Gated: `agents-block.sh --check` exits 4 on a figure-bearing bullet with nothing covering
+it, because the checker cannot do the arithmetic — writing it out is where a number that
+does not close becomes visible. Ticket ids, versions, years and calendar dates are not
+figures. Delete this section if the summary states no figures.
+TODO: `"<figure>" = <asset> <arithmetic>`.
+
+## Deliberate exclusions
+TODO: `<figure>` is not shown in `<view>` because `<reason>`. Delete this line if none.
+
+## Tailoring asked for
+TODO: standing constraints from chat — layout, wording, what is in or out. Delete if none.
+
+## Data sources
+TODO: where the numbers come from, and how to refresh them.
+</script>
+
+<style>
+  /* ── Light theme (default) ──────────────────────────────── */
+  :root {
+    --bg: #f5f5f7;          /* page background */
+    --card: #ffffff;         /* card surface */
+    --ink: #1d1d1f;          /* primary text */
+    --sub: #6e6e73;          /* secondary text */
+    --line: #e6e6ea;         /* hairlines / borders */
+    --code-bg: #1d1d1f;
+    --code-ink: #e6e6ea;
+    --accent: #0b6bcb;       /* links / accents */
+    --amber: #b25000;
+    --red: #b3261e;
+    --green: #1a7f37;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    /* SF system stack — NO serif, NO webfonts (offline-safe) */
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+    padding: 48px 20px 72px;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; }
+
+  /* ── Header — title + date line only. No .lede class on purpose (rule 2). ── */
+  h1 { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; margin: 0 0 6px; }
+  .meta { color: var(--sub); font-size: 13px; margin: 0 0 36px; }
+  a { color: var(--accent); text-decoration: none; }
+
+  /* ── Card ───────────────────────────────────────────────── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 22px;
+    margin: 0 0 22px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+
+  /* ── Pill tag ───────────────────────────────────────────── */
+  .tag {
+    display: inline-block;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.02em;
+    padding: 3px 9px; border-radius: 999px; margin-bottom: 12px;
+  }
+  .tag.amber { color: var(--amber); background: #fff2e6; }
+  .tag.red   { color: var(--red);   background: #fdecea; }
+  .tag.blue  { color: var(--accent); background: #e8f1fd; }
+  .tag.gray  { color: var(--sub);   background: #efeff2; }
+
+  /* ── Code block (wide content scrolls inside itself) ────── */
+  pre.raw {
+    background: var(--code-bg);
+    color: var(--code-ink);
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: 12.5px; line-height: 1.55;
+    border-radius: 10px; padding: 12px 14px; margin: 8px 0 18px;
+    overflow-x: auto;               /* horizontal scroll stays inside the block */
+    white-space: pre-wrap; word-break: break-word;
+  }
+
+  /* ── Bullet lists (exec summary, next steps / open questions) ──
+     One line per bullet is the rule, so keep them short rather than styling
+     around the wrap. See the Structure block in the <head>. */
+  ul.bullets { margin: 0; padding-left: 20px; }
+  ul.bullets li { margin: 0 0 7px; font-size: 15px; }
+  ul.bullets li:last-child { margin-bottom: 0; }
+
+  .note { font-size: 13px; color: var(--sub); margin: 12px 0 0; }
+  .note b { color: var(--ink); font-weight: 600; }
+
+  /* media never overflows the page */
+  img, svg, video { max-width: 100%; height: auto; }
+
+  /* ── SF Symbols icons — real Apple glyphs, recolorable & offline-safe ────
+     Generate `.sf-<name>` rules with this skill's sf-icons.sh, e.g.
+        bash sf-icons.sh lock bolt paperplane.fill > icons.css
+     paste them below (or <link> icons.css and let finalize.sh inline it), then:
+        <span class="sf sf-lock" style="width:20px;height:20px"></span>
+     Each icon is painted with currentColor, so it inherits the element's text
+     colour (set `color:` to tint it) and works in light and dark unchanged. */
+  .sf {
+    display: inline-block; vertical-align: middle;
+    background-color: currentColor;
+    -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+    -webkit-mask-position: center; mask-position: center;
+    -webkit-mask-size: contain; mask-size: contain;
+  }
+
+  footer.page { color: var(--sub); font-size: 13px; margin-top: 36px; text-align: center; }
+
+  /* ── Dark theme (only overrides that change) ────────────── */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #000000; --card: #1c1c1e; --ink: #f5f5f7; --sub: #98989d;
+      --line: #2c2c2e; --code-bg: #0b0b0c; --code-ink: #e6e6ea;
+      --accent: #6cb0ff; --amber: #ff9f45; --red: #ff6961; --green: #63d67d;
+    }
+    .tag.amber { background: #3a2410; } .tag.red { background: #3a1512; }
+    .tag.blue { background: #10243a; } .tag.gray { background: #2a2a2e; }
+    .card { box-shadow: none; }
+  }
+</style>
+<!-- Chat/message mockup? Add the iMessage bubbles snippet (only ~3% of artifacts need it):
+     <link rel="stylesheet" href="snippets/imessage-bubbles.css">   (finalize.sh inlines it)
+     …or paste snippets/imessage-bubbles.css into the <style> above. -->
+</head>
+<body>
+<div class="wrap">
+  <!-- HEADER = title + date line. Nothing else. No lede, no subtitle, no handling
+       note — see Hard design rule 2. What the page shows goes in the exec summary. -->
+  <header>
+    <h1>Page title</h1>
+    <p class="meta">Provenance · Month D, YYYY</p>
+  </header>
+
+  <!-- 1 · EXECUTIVE SUMMARY — derived conclusions only, max 5 one-line bullets.
+       5 is a ceiling, not a target: three strong bullets beat five padded ones.
+       Never restate a figure that appears verbatim in a chart or table below.
+       Delete this card only for type: mockup | preview | explainer. -->
+  <section class="card" id="exec-summary">
+    <span class="tag blue">Summary</span>
+    <ul class="bullets">
+      <li>A comparison, ratio, trend, or verdict — not a number copied from below.</li>
+      <li>Second derived conclusion.</li>
+      <li>Third, if there is a third worth making. Stop when you run out of substance.</li>
+    </ul>
+  </section>
+
+  <!-- 2 · THE MIDDLE — MECE facts, as visual as the comparison warrants.
+       Chart = shape/ordering/magnitude. Table = precision, metadata, outcome.
+       Same numbers in both is fine; a third home with no distinct job is not.
+       Pick the simplest form that carries meaning the text can't. -->
+  <section class="card">
+    <span class="tag blue">Section label</span>
+    <p class="note"><b>When:</b> the situation this illustrates.</p>
+    <pre class="raw">raw input or code sample goes here</pre>
+    <p class="note">Optional footnote explaining the choice.</p>
+  </section>
+
+  <!-- 3 · BOTTOM — conditional. Decision pages: id="next-steps". Reference pages:
+       id="open-questions" (what would change this). Max 5 one-line bullets.
+       IF THERE ARE NO NEXT STEPS, DELETE THIS CARD ENTIRELY — do not pad it —
+       and record `bottom: none — <reason>` in the block above. -->
+  <section class="card" id="next-steps">
+    <span class="tag gray">Next steps</span>
+    <ul class="bullets">
+      <li>One action, one line. Delete the card rather than inventing filler.</li>
+    </ul>
+  </section>
+
+  <!-- 4 · FOOTER — ONE line. Staleness + provenance, nothing else.
+       "Updated <date> · Sources: <where the numbers came from>". Max 160 chars.
+       Bump the date on every edit; a stale stamp is worse than none. -->
+  <footer class="page">Updated MONTH D, YYYY · Sources: where the numbers came from</footer>
+</div>
+</body>
+</html>

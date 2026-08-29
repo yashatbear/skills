@@ -1,0 +1,61 @@
+/* imessage-bubbles.css — opt-in iMessage chat styling for the `artifact` skill.
+ *
+ * The core template.html is lean; drop this in ONLY when the page shows a chat/message
+ * mockup. Two ways to use it:
+ *   1) link it and let finalize.sh inline it before hand-off/publish:
+ *        <link rel="stylesheet" href="snippets/imessage-bubbles.css">
+ *   2) or paste this whole block into the page's <style>.
+ *
+ * Markup:
+ *   <div class="phone"><div class="bubble">Incoming — gray, left, tail bottom-left.</div></div>
+ *   <div class="phone out"><div class="bubble out">Outgoing — blue, right, tail on the right.</div></div>
+ *
+ * Colors come from CSS variables so it themes with the page; the :root blocks below
+ * only add the bubble-specific vars and are safe to merge with the template's :root.
+ */
+:root {
+  --bubble: #e9e9eb;          /* incoming iMessage gray */
+  --bubble-ink: #1d1d1f;
+  --bubble-out: #0b84fe;      /* outgoing iMessage blue */
+  --bubble-out-ink: #ffffff;
+}
+
+.phone { display: flex; flex-direction: column; gap: 6px; }
+.phone.out { align-items: flex-end; }            /* outgoing bubbles hug the right */
+.bubble {
+  position: relative; max-width: 78%;
+  background: var(--bubble); color: var(--bubble-ink);
+  font-size: 16px; line-height: 1.4;
+  padding: 10px 15px; border-radius: 20px;
+  border-bottom-left-radius: 6px;                /* incoming: notch on the left */
+}
+/* incoming tail (bottom-left) */
+.bubble::after {
+  content: ""; position: absolute; left: -6px; bottom: 0;
+  width: 14px; height: 18px; background: var(--bubble);
+  border-bottom-right-radius: 16px;
+  -webkit-mask: radial-gradient(circle at 0 0, transparent 12px, #000 13px);
+          mask: radial-gradient(circle at 0 0, transparent 12px, #000 13px);
+}
+/* outgoing (blue, tail on the right) */
+.bubble.out {
+  background: var(--bubble-out); color: var(--bubble-out-ink);
+  border-bottom-left-radius: 20px; border-bottom-right-radius: 6px;
+}
+.bubble.out::after {
+  left: auto; right: -6px; background: var(--bubble-out);
+  border-bottom-right-radius: 0; border-bottom-left-radius: 16px;
+  -webkit-mask: radial-gradient(circle at 14px 0, transparent 12px, #000 13px);
+          mask: radial-gradient(circle at 14px 0, transparent 12px, #000 13px);
+}
+.bubble code {
+  font-family: "SF Mono", ui-monospace, Menlo, monospace;
+  font-size: 14px; background: rgba(0,0,0,0.06);
+  padding: 1px 5px; border-radius: 5px;
+}
+.bubble.out code { background: rgba(255,255,255,0.18); }
+
+@media (prefers-color-scheme: dark) {
+  :root { --bubble: #26262a; --bubble-ink: #f5f5f7; }
+  .bubble code { background: rgba(255,255,255,0.10); }
+}
