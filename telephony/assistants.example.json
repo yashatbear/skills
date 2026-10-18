@@ -1,0 +1,40 @@
+{
+  "assistants": {
+    "tab": {
+      "handle": "<the iMessage number or address you text Tab on>",
+      "what": "Tab (tab.bot): texting AI agent with its own phone line; private beta, join the waitlist",
+      "languages": ["de", "fr", "en"],
+      "countries": ["CH", "FR", "DE", "US"],
+      "daily_cap": 8,
+      "priority": 1,
+      "notes": "Standard German only (regional dialect may trip it). Caller ID is a US number. May keep recording silently after a voicemail unless told to hang up. Says it is an AI when asked."
+    },
+    "pally": {
+      "handle": "<the iMessage number you text Pally on>",
+      "what": "Pally (pally.com): texting AI assistant; calls included on the free plan, usage allowance refills a fraction per day",
+      "languages": ["de", "fr", "en"],
+      "countries": ["CH", "FR", "DE", "US"],
+      "daily_cap": 8,
+      "priority": 2,
+      "notes": "Gives the callback number saved on your own profile unless the task says otherwise: always say 'give only what is in the task'. Permissions for a call can expire at night."
+    },
+    "fo": {
+      "handle": "<the iMessage number you text Fo on>",
+      "what": "Fo by Wajo (wajo.ai): texting AI agent; free tier with an undisclosed daily cap",
+      "languages": ["de", "fr", "en"],
+      "countries": ["CH", "FR", "DE", "US"],
+      "daily_cap": 4,
+      "priority": 3,
+      "notes": "Opens by saying it is an AI and that the call is recorded. Looped for hours against a voice-bot receptionist and drained its allowance: mark it depleted afterwards. Its end-call control can refuse, so a time limit in the task is not enforceable."
+    },
+    "arlo": {
+      "handle": "<the iMessage number you text Arlo on>",
+      "what": "Arlo (arlo.sh): texting AI assistant; pay per talking minute",
+      "languages": ["en"],
+      "countries": ["US", "CA"],
+      "daily_cap": 0,
+      "priority": 9,
+      "notes": "Only dials US and Canadian numbers; listed so nobody re-tests it for international calls."
+    }
+  }
+}
