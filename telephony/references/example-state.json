@@ -1,0 +1,31 @@
+{
+  "campaign": {
+    "goal": "Find out whether they buy a car like this and at what rough price or next step.",
+    "languages": {"de": "German", "fr": "French"},
+    "openers": {
+      "de": "Guten Tag, <Name> möchte seinen <Auto> verkaufen, und ich rufe als sein KI-Assistent an. Haben Sie kurz Zeit?",
+      "fr": "Bonjour, <Name> souhaite vendre sa <Auto>, et j'appelle en tant que son assistant IA. Avez-vous un instant ?"
+    },
+    "ask": "Then ask the one question: do they buy a car like this, rough price or next step? Ask them to reply by email to <address>.",
+    "contact_rule": "Do not give any phone number unless this task includes one; the default is the email address above.",
+    "facts": "<only facts that were already in the written outreach: model, VIN, plate, km, condition, known repairs>. Location only if asked.",
+    "rules": "Do not speak while a recorded menu or message plays (press the sales key if offered); speak only to a live person; say the opener once, then wait; one short sentence per turn; hang up right after any goodbye; answer 'are you still there' once at most; 5-minute limit; if nobody answers leave one short voicemail and hang up; if the line dies instantly do not retry on this call.",
+    "gap_hours": 2,
+    "busy_minutes": 8
+  },
+  "assistant_status": {},
+  "targets": [
+    {
+      "id": "example-dealer",
+      "name": "Example Garage",
+      "numbers": ["+41 00 000 00 00"],
+      "lang": "de",
+      "country": "CH",
+      "priority": 5,
+      "hours": {"mon-fri": ["08:00-12:00", "13:30-18:30"], "sat": ["09:00-16:00"]},
+      "status": "pending",
+      "dispatches": 0,
+      "note": "hours unconfirmed? say so here"
+    }
+  ]
+}
