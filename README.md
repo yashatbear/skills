@@ -34,6 +34,7 @@ A couple of skills need a build or setup step, documented in their own `SKILL.md
 - **d** — "Document" — captures the conversation's decisions, findings, and referenced resources into your project's docs folder. Sibling of `learn`.
 - **linkedin** — Searches LinkedIn profiles/companies/jobs via a local MCP server with faceted filters.
 - **telephony** — Runs outbound AI phone calls through several call-capable texting assistants (Tab, Pally, Fo, ...): load-balanced and parallel, retried every couple of hours inside each business's opening hours. Ships a dispatcher, a reply watcher, a small Messages helper (macOS) and a lessons file on phone menus, voicemail, voice-bot receptionists and caller-ID rejection.
+- **opens** — Lists what's waiting on you in a multi-agent session (decisions, approvals, opt-ins, worker questions), skipping anything an agent or worker is still working on. Read-only, one line per item with a recommended pick.
 - **p** — "Proceed" — execute the recommended action from the previous response.
 - **s** — "Simplify" — re-explain the previous response in plain language.
 - **r** — "Recommend" — gather context on an open decision and deliver a reasoned recommendation.
