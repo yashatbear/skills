@@ -46,6 +46,9 @@ Leave out:
    - Background `Agent` and fork launches in this session: which have sent a completion
      notice and which haven't.
    - `ListAgents` for peers this session messaged with `SendMessage`.
+     An **idle** peer is not cooking. Read the last assistant turns of its transcript
+     and mark the item done or on the user from what it says. A peer that finished
+     and went idle may have closed the item already.
    - Background Bash jobs, Monitors, and `/loop` or `CronList` schedules this session started.
    - For each PR or ticket the session names whose state decides whether it's waiting on
      the user: `gh pr view <n> --json state,autoMergeRequest,reviewDecision,statusCheckRollup`,
