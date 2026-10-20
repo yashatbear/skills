@@ -49,7 +49,11 @@ Leave out:
    - Background Bash jobs, Monitors, and `/loop` or `CronList` schedules this session started.
    - For each PR or ticket the session names whose state decides whether it's waiting on
      the user: `gh pr view <n> --json state,autoMergeRequest,reviewDecision,statusCheckRollup`,
-     or your issue tracker's equivalent. Don't fetch anything else.
+     or your issue tracker's equivalent.
+   - For each item that says the user should send, reply to, or email someone: search
+     their sent mail (or the sent side of that channel) for that recipient. People often
+     send things themselves; one already sent is done, not on them.
+     Don't fetch anything else.
 2. **Walk the session** for asks, returned options, parked approvals, and unanswered
    questions. For each one, mark it cooking, done, or on the user, using the live state
    from step 1. Live state wins over what the transcript last said: a worker that

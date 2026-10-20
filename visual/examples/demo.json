@@ -1,0 +1,17 @@
+{
+  "ref": "Demo",
+  "question": "Results at 390px: fit every filter chip, or keep the row scrolling?",
+  "source": "examples/demo-page.html at 390px · options are CSS edits on that render",
+  "options": [
+    {"name": "Today", "baseline": true, "image": "demo-today.png",
+     "zoom": {"x": 190, "y": 50, "w": 200, "h": 44},
+     "note": "Last chips cut off at the edge."},
+    {"name": "Fit all five", "rec": true, "image": "demo-fit.png",
+     "zoom": {"x": 190, "y": 50, "w": 200, "h": 44},
+     "note": "Tighter chips, 12px text: all five show."},
+    {"name": "Scroll + fade", "image": "demo-fade.png",
+     "zoom": {"x": 190, "y": 50, "w": 200, "h": 44},
+     "note": "Same row; the right edge fades to hint at more."}
+  ],
+  "why": "Every filter visible with no swipe; the text gets one size smaller."
+}
