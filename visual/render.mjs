@@ -22,7 +22,7 @@ const COL_W = 390; // CSS px per column; a 390px phone shot shows at 1:1
 const die = (m) => (console.error(`visual: ${m}`), process.exit(2));
 const args = process.argv.slice(2);
 const outIdx = args.indexOf("--out");
-const specPath = args.find((a, i) => !a.startsWith("--") && i !== outIdx + 1);
+const specPath = args.find((a, i) => !a.startsWith("--") && (outIdx < 0 || i !== outIdx + 1));
 if (!specPath) die("usage: node render.mjs <spec.json> [--out <dir>]");
 const spec = JSON.parse(readFileSync(specPath, "utf8"));
 const specDir = dirname(resolve(specPath));
